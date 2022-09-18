@@ -16,7 +16,7 @@ for ticker in stocks:
 def volatility(DF):
     df = DF.copy()
     df["return"] =  df["Adj Close"].pct_change()
-    vol = df["return"].std() * np.sqrt(252)
+    vol = df["return"].std() * np.sqrt(252) # annualized volatility
     return vol
 
 for ticker in clhv:
