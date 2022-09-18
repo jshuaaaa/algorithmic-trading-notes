@@ -31,8 +31,8 @@ def ADX(DF, n=20):
     df["downmove"] = df["Low"].shift(1) - df["Low"]
     df["+dm"] = np.where((df["upmove"]>df["downmove"]) & (df["upmove"] > 0),df['upmove'],0)
     df["-dm"] = np.where((df["upmove"]<df["downmove"]) & (df["downmove"] > 0),df['downmove'],0)
-    df["+di"] = 100 * (df["+dm"]/df["ATR"]).ewm(span=n, min_periods=n).mean()
-    df["-di"] = 100 * (df["-dm"]/df["ATR"]).ewm(span=n, min_periods=n).mean()
+    df["+di"] = 100 * (df["+dm"]/df["ATR"]).ewm(com=n, min_periods=n).mean()
+    df["-di"] = 100 * (df["-dm"]/df["ATR"]).ewm(com=n, min_periods=n).mean()
     df["ADX"] = 100 * abs((df["+di"] - df["-di"]) / (df["+di"] + df["-di"])).ewm(span=n, min_periods=n).mean()
     return df["ADX"]
 
