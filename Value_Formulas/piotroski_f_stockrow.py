@@ -1,9 +1,3 @@
-# ============================================================================
-# Piotroski f score implementation
-# Author - Mayank Rasu
-
-# Please report bugs/issues in the Q&A section
-# =============================================================================
 
 import pandas as pd
 
