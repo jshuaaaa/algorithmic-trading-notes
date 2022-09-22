@@ -17,7 +17,7 @@ client = oandapyV20.API(access_token=open(token_path, "r").read(),environment="p
 account_id = "101-001-23303695-001"
 
 # define strategy parameters
-pairs = ['EUR_NZD', 'EUR_DKK', 'EUR_NOK','NZD_JPY', 'USD_CAD', 'GBP_USD', 'AUD_USD']
+pairs = ['EUR_NZD', 'EUR_NOK','NZD_JPY', 'USD_CAD', 'GBP_USD', 'AUD_USD']
 pos_size = 100
 
 
@@ -33,7 +33,7 @@ def ATR(DF, n):
     df['ATR'] = df['TR'].rolling(n).mean()
     #df['ATR'] = df['TR'].ewm(span=n,adjust=False,min_periods=n).mean()
     df2 = df.drop(['H-L','H-PC','L-PC'],axis=1)
-    return round(df2["ATR"][-1],5)
+    return df2
 
 def renko_DF(DF):
     df = DF.copy()
@@ -41,7 +41,7 @@ def renko_DF(DF):
     df.iloc[:,[0,1,2,3,4,5]]
     df.columns = ["date", "open", "high", "low", "close", "volume"] # Making columns stocktrends compatible
     df2 = Renko(df)
-    df2.brick_size = 3 * ATR(DF,120)
+    df2.brick_size = round(ATR(DF,120)["ATR"][-1],4)
     renko_df = df2.get_ohlc_data()
     renko_df["bar_num"] = np.where(renko_df["uptrend"]==True,1,np.where(renko_df["uptrend"]==False,-1,0))
     for i in range(1,len(renko_df["bar_num"])):
@@ -132,7 +132,6 @@ def market_order(instrument,units,sl):
     client.request(r)
 
 
-
 def main():
     try:
         for currency in pairs:
@@ -190,7 +189,7 @@ def main():
 
 
 starttime=time.time()
-timeout = time.time() + 60*60*8  # 60 seconds times 60 meaning the script will run for 1 hr
+timeout = time.time() + 60*60*8  # 60 seconds times 60 times 8 meaning the script will run for 8 hrs
 while time.time() <= timeout:
     try:
         print("passthrough at ",time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time())))
