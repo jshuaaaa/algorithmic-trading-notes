@@ -131,7 +131,7 @@ def market_order(instrument,units,sl):
     r = orders.OrderCreate(accountID=account_id, data=data)
     client.request(r)
 
-
+currency = "NZD_JPY"
 def main():
     try:
         for currency in pairs:
@@ -160,17 +160,17 @@ def main():
             signal = trade_signal(renko_merge(ohlc_df),long_short)
             
             if signal == "Buy":
-                market_order(currency,pos_size,3*ATR(ohlc_df,120))
+                market_order(currency,pos_size,round(3*ATR(ohlc_df,120),3))
                 print("New long position initiated for ", currency)
             
             elif signal == "Sell":
-                market_order(currency,-1*pos_size,3*ATR(ohlc_df,120))
+                market_order(currency,-1*pos_size,round(3*ATR(ohlc_df,120),3))
                 print("New short position initiated for ", currency)
                 
                 
             elif signal == "Close_Buy":
-                market_order(currency,pos_size,3*ATR(ohlc_df,120))
-                market_order(currency,pos_size,3*ATR(ohlc_df,120))
+                market_order(currency,pos_size,round(3*ATR(ohlc_df,120),3))
+                market_order(currency,pos_size,round(3*ATR(ohlc_df,120),3))
                 print("New long position initiated for ", currency)
             
             elif signal == "Close":
@@ -179,8 +179,8 @@ def main():
                 print('position closed')
             
             elif signal == "Close_Sell":
-                market_order(currency,-1*pos_size,3*ATR(ohlc_df,120))
-                market_order(currency,-1*pos_size,3*ATR(ohlc_df,120))
+                market_order(currency,-1*pos_size,round(3*ATR(ohlc_df,120),3))
+                market_order(currency,-1*pos_size,round(3*ATR(ohlc_df,120),3))
                 print("New short position initiated for ", currency)
             
 
@@ -190,6 +190,7 @@ def main():
 
 starttime=time.time()
 timeout = time.time() + 60*60*8  # 60 seconds times 60 times 8 meaning the script will run for 8 hrs
+
 while time.time() <= timeout:
     try:
         print("passthrough at ",time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time())))
@@ -199,6 +200,10 @@ while time.time() <= timeout:
         print('\n\nKeyboard exception received. Exiting.')
         exit()
                 
+        
+        
+
+
                 
         
 
